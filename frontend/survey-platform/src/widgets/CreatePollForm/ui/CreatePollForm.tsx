@@ -17,17 +17,10 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-
-interface Poll {
-  title: string;
-  answers: string[];
-  votes: number[];
-  type: "multiple" | "single";
-  submitted: boolean;
-}
+import { PollData } from "../../Poll";
 
 interface CreatePollFormProps {
-  onCreate: (poll: Poll) => void;
+  onCreate: (poll: Omit<PollData, "id">) => void;
 }
 
 const CreatePollForm: React.FC<CreatePollFormProps> = ({ onCreate }) => {
@@ -53,7 +46,7 @@ const CreatePollForm: React.FC<CreatePollFormProps> = ({ onCreate }) => {
     title.trim() !== "" && answers.every((answer) => answer.trim() !== "");
 
   const handleSubmit = () => {
-    const newPoll: Poll = {
+    const newPoll = {
       title,
       answers,
       votes: new Array(answers.length).fill(0),

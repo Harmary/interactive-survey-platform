@@ -11,15 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { Api } from "../../../app/api/api";
+import { PollData } from "../model/types";
 
 interface PollProps {
-  poll: {
-    title: string;
-    answers: Array<string>;
-    votes: Array<number>;
-    type: "multiple" | "single";
-    submitted: boolean;
-  };
+  poll: PollData;
 }
 
 const Poll: React.FC<PollProps> = ({ poll }) => {
@@ -46,6 +42,7 @@ const Poll: React.FC<PollProps> = ({ poll }) => {
   const handleSubmit = () => {
     selectedAnswers.forEach((index) => {
       poll.votes[index] += 1;
+      Api.voteInPoll(poll.id, index);
     });
     setIsSubmitted(true);
     poll.submitted = true;
