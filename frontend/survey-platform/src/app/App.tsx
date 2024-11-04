@@ -9,8 +9,6 @@ import { PollData } from "../widgets/Poll";
 import Poll from "../widgets/Poll/ui/Poll";
 import CreatePollForm from "../widgets/CreatePollForm/ui/CreatePollForm";
 
-import "./App.css";
-
 function App() {
   const [polls, setPolls] = React.useState<PollData[]>([]);
   const [alert, setAlert] = React.useState<AlertProps>({});

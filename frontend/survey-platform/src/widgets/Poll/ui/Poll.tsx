@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Box,
   Button,
@@ -10,9 +12,9 @@ import {
   Radio,
   Typography,
 } from "@mui/material";
-import React from "react";
-import { Api } from "../../../app/api/api";
+
 import { PollData } from "../model/types";
+import { Api } from "../../../app/api/api";
 
 interface PollProps {
   poll: PollData;
@@ -20,8 +22,8 @@ interface PollProps {
 
 const Poll: React.FC<PollProps> = React.memo(({ poll }) => {
   const [selectedAnswers, setSelectedAnswers] = React.useState<number[]>([]);
-  const totalVotes = poll.votes.reduce((acc, votes) => acc + votes, 0);
   const [isSubmitted, setIsSubmitted] = React.useState(poll.submitted);
+  const totalVotes = poll.votes.reduce((acc, votes) => acc + votes, 0);
 
   React.useEffect(() => {
     setIsSubmitted(poll.submitted);

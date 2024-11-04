@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
@@ -23,9 +23,9 @@ interface CreatePollFormProps {
 }
 
 const CreatePollForm: React.FC<CreatePollFormProps> = ({ onCreate }) => {
-  const [title, setTitle] = useState("");
-  const [answers, setAnswers] = useState<string[]>([""]);
-  const [type, setType] = useState<"multiple" | "single">("single");
+  const [title, setTitle] = React.useState("");
+  const [answers, setAnswers] = React.useState<string[]>([""]);
+  const [type, setType] = React.useState<"multiple" | "single">("single");
 
   const handleAddAnswer = () => {
     setAnswers([...answers, ""]);
