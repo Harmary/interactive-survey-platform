@@ -37,9 +37,19 @@
    cd interactive-survey-platform
    ```
 
-2. Запустите docker-compose.local
+2. Добавьте в папку backend/interactive-survey-platform файл .env c содержимым
+
+   ```
+   DB_HOST=db
+   DB_PORT=5432
+   DB_USERNAME=postgres
+   DB_PASSWORD=postgresql123
+   DB_NAME=poll
+   ```
+
+3. Запустите docker-compose.local
    `docker-compose -f .\docker-compose.local.yml up`
-3. Откройте приложение по адресу http://localhost:80
+4. Откройте приложение по адресу http://localhost:80
 
 ### API Документация
 
