@@ -47,8 +47,10 @@
    DB_NAME=poll
    ```
 
-3. Запустите docker-compose.local
+3. Запустите docker-compose.local в корневой папке проекта
+
    `docker-compose -f .\docker-compose.local.yml up`
+
 4. Откройте приложение по адресу http://localhost:80
 
 ### API Документация
