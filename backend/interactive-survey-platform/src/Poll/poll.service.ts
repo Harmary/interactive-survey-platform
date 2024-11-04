@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Polls } from './poll.entity';
-import { Gateway } from 'src/gateway/gateway';
+import { Gateway } from '../gateway/gateway';
 
 @Injectable()
 export class PollService {
