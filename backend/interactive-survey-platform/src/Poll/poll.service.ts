@@ -2,29 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Polls } from './poll.entity';
+import { Gateway } from 'src/gateway/gateway';
 
 @Injectable()
 export class PollService {
   constructor(
     @InjectRepository(Polls)
     private pollRepository: Repository<Polls>,
+    private websocketGateway: Gateway,
   ) {}
 
-  create(poll: Partial<Polls>): Promise<Polls> {
+  async create(poll: Partial<Polls>): Promise<Polls> {
     const newPoll = this.pollRepository.create(poll);
-    return this.pollRepository.save(newPoll);
+    const savedPoll = await this.pollRepository.save(newPoll);
+    this.websocketGateway.emitPollCreated(savedPoll);
+    return savedPoll;
   }
 
-  findAll(): Promise<Polls[]> {
+  async findAll(): Promise<Polls[]> {
     return this.pollRepository.find();
   }
 
-  findOne(id: number): Promise<Polls> {
+  async findOne(id: number): Promise<Polls> {
     return this.pollRepository.findOneBy({ id });
   }
 
   async remove(id: number): Promise<void> {
     await this.pollRepository.delete(id);
+    this.websocketGateway.emitPollDeleted(id);
   }
 
   async vote(id: number, answerIndex: number): Promise<Polls> {
@@ -33,6 +38,8 @@ export class PollService {
       throw new Error('Poll not found');
     }
     poll.votes[answerIndex] += 1;
-    return this.pollRepository.save(poll);
+    const updatedPoll = await this.pollRepository.save(poll);
+    this.websocketGateway.emitPollVoted(updatedPoll);
+    return updatedPoll;
   }
 }

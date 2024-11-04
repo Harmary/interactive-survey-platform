@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import "./App.css";
+
 import { Alert, AlertProps, Container, Stack } from "@mui/material";
+
+import { Api } from "./api/api";
+import socket from "./api/socket";
+import Header from "./header/ui/Header";
 import { PollData } from "../widgets/Poll";
 import Poll from "../widgets/Poll/ui/Poll";
-import Header from "./header/ui/Header";
 import CreatePollForm from "../widgets/CreatePollForm/ui/CreatePollForm";
-import { Api } from "./api/api";
+
+import "./App.css";
 
 function App() {
   const [polls, setPolls] = useState<PollData[]>([]);
@@ -16,6 +20,25 @@ function App() {
     Api.getAllPolls().then((res) => {
       setPolls(res.data);
     });
+    socket.on("pollCreated", (newPoll: PollData) => {
+      setPolls((prev) => [newPoll, ...prev]);
+    });
+
+    socket.on("pollDeleted", (id: number) => {
+      setPolls((prev) => prev.filter((poll) => poll.id !== id));
+    });
+
+    socket.on("pollVoted", (updatedPoll: PollData) => {
+      setPolls((prev) =>
+        prev.map((poll) => (poll.id === updatedPoll.id ? updatedPoll : poll))
+      );
+    });
+
+    return () => {
+      socket.off("pollCreated");
+      socket.off("pollDeleted");
+      socket.off("pollVoted");
+    };
   }, []);
 
   const handleCreatePoll = (newPoll: Omit<PollData, "id">) => {
@@ -50,7 +73,6 @@ function App() {
           }}
         >
           {alert.severity && <Alert {...alert}></Alert>}
-
           {showForm && <CreatePollForm onCreate={handleCreatePoll} />}
           {polls.map((poll, index) => (
             <Poll key={index} poll={poll} />

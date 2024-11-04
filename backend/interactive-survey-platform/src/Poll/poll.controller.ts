@@ -3,11 +3,15 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { PollService } from './poll.service';
 import { Polls } from './poll.entity';
 import { CreatePollDto } from './createPoll.dto';
+import { Gateway } from 'src/gateway/gateway';
 
 @ApiTags('polls')
 @Controller('polls')
 export class PollController {
-  constructor(private readonly pollService: PollService) {}
+  constructor(
+    private readonly pollService: PollService,
+    private readonly websocketGateway: Gateway,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Создать новый опрос' })

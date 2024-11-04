@@ -18,7 +18,7 @@ interface PollProps {
   poll: PollData;
 }
 
-const Poll: React.FC<PollProps> = ({ poll }) => {
+const Poll: React.FC<PollProps> = React.memo(({ poll }) => {
   const [selectedAnswers, setSelectedAnswers] = React.useState<number[]>([]);
   const totalVotes = poll.votes.reduce((acc, votes) => acc + votes, 0);
   const [isSubmitted, setIsSubmitted] = React.useState(poll.submitted);
@@ -42,10 +42,12 @@ const Poll: React.FC<PollProps> = ({ poll }) => {
   const handleSubmit = () => {
     selectedAnswers.forEach((index) => {
       poll.votes[index] += 1;
-      Api.voteInPoll(poll.id, index);
+      Api.voteInPoll(poll.id, index).then((response) => {
+        poll.votes = response.data.votes;
+        setIsSubmitted(true);
+        poll.submitted = true;
+      });
     });
-    setIsSubmitted(true);
-    poll.submitted = true;
   };
 
   return (
@@ -123,6 +125,6 @@ const Poll: React.FC<PollProps> = ({ poll }) => {
       </Grid2>
     </Paper>
   );
-};
+});
 
 export default Poll;
