@@ -11,7 +11,7 @@ import { Polls } from '../Poll/poll.entity';
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: 'http://localhost',
     credentials: true,
   },
 })

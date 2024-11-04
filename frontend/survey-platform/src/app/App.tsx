@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Alert, AlertProps, Container, Stack } from "@mui/material";
 
@@ -12,16 +12,16 @@ import CreatePollForm from "../widgets/CreatePollForm/ui/CreatePollForm";
 import "./App.css";
 
 function App() {
-  const [polls, setPolls] = useState<PollData[]>([]);
+  const [polls, setPolls] = React.useState<PollData[]>([]);
   const [alert, setAlert] = React.useState<AlertProps>({});
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = React.useState(false);
 
   React.useEffect(() => {
     Api.getAllPolls().then((res) => {
       setPolls(res.data);
     });
     socket.on("pollCreated", (newPoll: PollData) => {
-      setPolls((prev) => [newPoll, ...prev]);
+      setPolls((prev) => [...prev, newPoll]);
     });
 
     socket.on("pollDeleted", (id: number) => {
