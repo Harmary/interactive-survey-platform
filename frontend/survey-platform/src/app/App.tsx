@@ -42,18 +42,12 @@ function App() {
   }, []);
 
   const handleCreatePoll = (newPoll: Omit<PollData, "id">) => {
-    Api.createPoll(newPoll)
-      .then((res) => {
-        setPolls((prev) => {
-          return [res.data, ...prev];
-        });
-      })
-      .catch(() => {
-        setAlert({
-          severity: "error",
-          children: "Не удалось добавить опрос",
-        });
+    Api.createPoll(newPoll).catch(() => {
+      setAlert({
+        severity: "error",
+        children: "Не удалось добавить опрос",
       });
+    });
     setShowForm(false);
   };
 
